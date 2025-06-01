@@ -40,7 +40,7 @@ if uploaded_file:
         st.dataframe(df, use_container_width=True)
 
         # ✅ رسم شريطي لتوزيع المشاعر
-        st.subheader("📊 Sentiment Distribution")
+        st.subheader(" Sentiment Distribution")
         sentiment_counts = df["Sentiment"].value_counts().reset_index()
         sentiment_counts.columns = ["Sentiment", "Count"]
         fig = px.bar(sentiment_counts, x="Sentiment", y="Count", color="Sentiment",
@@ -48,7 +48,7 @@ if uploaded_file:
         st.plotly_chart(fig, use_container_width=True)
 
         # ✅ جدول تكرار الجمل
-        st.subheader("🗂️ Text Frequency Table")
+        st.subheader("Text Frequency Table")
         text_counts = df["text"].value_counts().reset_index()
         text_counts.columns = ["text", "Count"]
         text_counts["Percentage"] = round((text_counts["Count"] / len(df)) * 100, 2)
