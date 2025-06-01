@@ -1,6 +1,7 @@
 streamlit
-pandas
 transformers
 torch
+pandas
+matplotlib
 openpyxl
 xlsxwriter
