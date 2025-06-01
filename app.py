@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from transformers import pipeline
 from io import BytesIO
+import plotly.express as px
 
 # إعداد الصفحة
 st.set_page_config(page_title="Sentiment Analysis App", layout="wide")
@@ -34,15 +35,30 @@ if uploaded_file:
             df["Sentiment"] = [pred["label"] for pred in predictions]
             df["Confidence"] = [round(pred["score"], 2) for pred in predictions]
 
-        # عرض النتائج
+        # ✅ عرض النتائج
         st.success("✅ Analysis complete!")
         st.dataframe(df, use_container_width=True)
 
-        # تحميل Excel فقط
+        # ✅ رسم شريطي لتوزيع المشاعر
+        st.subheader("📊 Sentiment Distribution")
+        sentiment_counts = df["Sentiment"].value_counts().reset_index()
+        sentiment_counts.columns = ["Sentiment", "Count"]
+        fig = px.bar(sentiment_counts, x="Sentiment", y="Count", color="Sentiment",
+                     title="Number of Each Sentiment", text="Count")
+        st.plotly_chart(fig, use_container_width=True)
+
+        # ✅ جدول تكرار الجمل
+        st.subheader("🗂️ Text Frequency Table")
+        text_counts = df["text"].value_counts().reset_index()
+        text_counts.columns = ["text", "Count"]
+        text_counts["Percentage"] = round((text_counts["Count"] / len(df)) * 100, 2)
+        st.dataframe(text_counts)
+
+        # ✅ تحميل Excel فقط
         excel_buffer = BytesIO()
         with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
             df.to_excel(writer, index=False, sheet_name="Sentiment Results")
-            writer.sheets["Sentiment Results"].right_to_left()  # دعم RTL
+            writer.sheets["Sentiment Results"].right_to_left()
         excel_buffer.seek(0)
 
         st.download_button(
