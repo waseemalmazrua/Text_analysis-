@@ -24,7 +24,7 @@ if uploaded_file:
     else:
         df = pd.read_excel(uploaded_file)
 
-    # تحقق من وجود عمود text
+    # تحقق من وجود العمود
     if "text" not in df.columns:
         st.error("❌ The file must contain a column named 'text'.")
     else:
@@ -38,21 +38,11 @@ if uploaded_file:
         st.success("✅ Analysis complete!")
         st.dataframe(df, use_container_width=True)
 
-        # ⬇️ زر تحميل CSV
-        csv_data = df.to_csv(index=False, encoding='utf-8-sig')
-        st.download_button(
-            label="⬇️ Download Results as CSV",
-            data=csv_data,
-            file_name="sentiment_results.csv",
-            mime="text/csv"
-        )
-
-        # ⬇️ زر تحميل Excel
+        # تحميل Excel فقط
         excel_buffer = BytesIO()
         with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
             df.to_excel(writer, index=False, sheet_name="Sentiment Results")
-            worksheet = writer.sheets["Sentiment Results"]
-            worksheet.right_to_left()  # دعم RTL
+            writer.sheets["Sentiment Results"].right_to_left()  # دعم RTL
         excel_buffer.seek(0)
 
         st.download_button(
