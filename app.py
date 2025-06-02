@@ -67,3 +67,15 @@ if uploaded_file:
             file_name="sentiment_results.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+
+st.markdown("---")
+st.markdown(
+    """
+    <div style='text-align: center; font-size: 14px;'>
+        Developed by <b>Waseem Almazrua</b> | 
+        <a href='https://www.linkedin.com/in/waseemalmazrua/' target='_blank'>LinkedIn Profile</a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
